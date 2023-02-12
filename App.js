@@ -2,6 +2,7 @@ import React from "react";
 import StackNavigator from './StackNavigator';
 import { NavigationContainer } from "@react-navigation/native"
 import { NativeWindStyleSheet } from "nativewind";
+import { AuthProvider } from "./hooks/useAuth";
 
 export default function App() {
 
@@ -11,7 +12,9 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <StackNavigator />
+      <AuthProvider>
+        <StackNavigator />
+      </AuthProvider>
     </NavigationContainer>
   );
 };
