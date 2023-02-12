@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { useNavigation } from "@react-navigation/core"
 import { Button, Text, View, SafeAreaView, TouchableOpacity, Image } from 'react-native'
 import { AntDesign, Entypo, Ionicons } from "@expo/vector-icons"
@@ -37,9 +37,10 @@ const DUMMY_DATA = [
 const HomeScreen = () => {
 
     const navigation = useNavigation();
+    const swipeRef = useRef(null);
 
     return (
-      <SafeAreaView className="flex-1">
+      <SafeAreaView className="flex-1 bg-neutral-900">
 
         <View className="flex-row items-center justify-between px-5">
           <TouchableOpacity>
@@ -48,7 +49,7 @@ const HomeScreen = () => {
             className="h-10 w-10 rounded-full"/>
           </TouchableOpacity>
 
-          <TouchableOpacity>
+          <TouchableOpacity onPress={ () => navigation.navigate("Modal") }>
             <Image 
             source={ require('../public/logo.png')}
             className="h-14 w-14"/>
@@ -60,19 +61,67 @@ const HomeScreen = () => {
         </View>
 
           <View className="flex-1 -mt-6">
-            <Swiper containerStyle={{ backgroundColor: "transparent" }}
+            <Swiper
+              ref={swipeRef}
+              containerStyle={{ backgroundColor: "transparent" }}
               cards={DUMMY_DATA}
+              stackSize={5}
+              cardIndex={0}
+              animateCardOpacity
+              verticalSwipe={false}
+              onSwipedLeft={() => {
+                console.log('Swipe NOPE')
+              }}
+              onSwipedRight={() => {
+                console.log('Swipe MATCH')
+              }}
+              overlayLabels={{
+                left: {
+                  title: "Nope",
+                  style: {
+                    label: {
+                      textAlign: "right",
+                      color: "red"
+                    },
+                  },
+                },
+                right: {
+                  title: "Match",
+                  style: {
+                    label: {
+                      textAlign: "left",
+                      color: "green"
+                    },
+                  },
+                },
+              }}
               renderCard={(card) => (
                 <View key={card.id} className="relative bg-white h-3/4 rounded-xl" >
                   <Image className="absolute top-0 h-full w-full rounded-xl"
                   source={{ uri: card.photoURL }}/>
-                  <Text>{card.firstName}</Text>
+                  <View className="absolute bottom-0 bg-white w-full h-20 flex-row justify-between items-between px-6 py-4 rounded-b-xl shadow-xl">
+                    <View>
+                      <Text className="text-xl font-bold" >{card.firstName} {card.lastName}</Text>
+                      <Text> {card.occupation} </Text>
+                    </View>
+                  <Text className="text-2xl font-bold"> {card.age} </Text>
+                  </View>
                 </View>
               )}
             />
           </View>
-
-
+          <View className="flex flex-row justify-evenly">
+            <TouchableOpacity
+            onPress={() => swipeRef.current.swipeLeft()}
+            className="items-center justify-center rounded-full w-16 h-16 bg-red-200">
+              <Entypo name="cross" size={24} color="red"/>
+            </TouchableOpacity>
+            <TouchableOpacity
+            onPress={() => swipeRef.current.swipeRight()}
+            className="items-center justify-center rounded-full w-16 h-16 bg-green-200">
+              <Entypo name="heart" size={24} color="green"/>
+            </TouchableOpacity>
+          </View>
       </SafeAreaView>
     );
 };
