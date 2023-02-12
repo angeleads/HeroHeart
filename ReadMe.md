@@ -8,11 +8,14 @@ npx expo register
 check you're logged in
 npx expo whoami
 
-create project 
+NOT NEEDED RIGHT NOW
+///////////////////////////////////////////////////7//////
+create project
 expo init "name of the project"
 
 enter the project
 cd "name of the project"
+//////////////////////////////////////////////////////////
 
 run the project
 expo start
